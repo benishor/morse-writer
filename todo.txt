@@ -1,0 +1,13 @@
+Usage:
+
+	morse-writer -i book.txt -o output.wav -s 20 -f 500 -w sine -p 1.5 
+
+		-i = input file to be rendered
+		-o = output wav file
+		-s = speed in WPM (defaults to 20)
+		-f = signal frequency in Hz (defaults to 600)
+		-p = punchiness. float. the greater, the more distorted the signal will be  (defaults to 0)
+
+What it does:
+	- reads the specified file and renders it as wav into the specified output file
+	- unknown characters are translated to ?
