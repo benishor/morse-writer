@@ -10,7 +10,7 @@ public:
 
     MorseElement get();
 
-    bool finished();
+    bool finished() const;
 
 private:
     void crackIntoElements();

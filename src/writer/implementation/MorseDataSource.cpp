@@ -16,7 +16,7 @@ MorseElement MorseDataSource::get() {
     return result;
 }
 
-bool MorseDataSource::finished() {
+bool MorseDataSource::finished() const {
     return elementQueue.empty();
 }
 

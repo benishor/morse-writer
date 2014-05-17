@@ -1,6 +1,7 @@
 #include <MorseWriter.h>
 #include <MorseDataSource.h>
 #include <MorseDictionary.h>
+#include <MorseRenderer.h>
 #include <iostream>
 #include <fstream>
 #include <algorithm>
@@ -37,7 +38,7 @@ string filterContent(string& content, const MorseDictionary& dictionary) {
 
     // Remove invalid characters from the string
     content.erase(remove_if(content.begin(), content.end(), [dictionary](char val) {
-        return !dictionary.contains(val);
+        return val != ' ' && !dictionary.contains(val);
     }), content.end());
 
     return content;
@@ -55,5 +56,18 @@ void MorseWriter::write() {
     MorseDictionary dictionary = MorseDictionary::defaultDictionary();
     string&& content = getFileContent(configuration.inputFilename);
     content = filterContent(content, dictionary);
+
+    MorseDataSource dataSource = MorseDataSource(content, dictionary);
+    MorseRenderer renderer = MorseRenderer(dataSource);
+
+    const int SAMPLES = 1024;
+    short buffer[SAMPLES];
+
+    ofstream out(configuration.outputFilename, ios::binary);
+    while (!renderer.finished()) {
+        int renderedSamples = renderer.render(buffer, SAMPLES);
+        out.write((char*)buffer, sizeof(short)*SAMPLES);
+    }
+    out.close();
 }
 

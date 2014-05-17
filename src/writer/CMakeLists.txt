@@ -5,6 +5,7 @@ set(HEADERS
    ${CMAKE_CURRENT_SOURCE_DIR}/headers/MorseDataSource.h
    ${CMAKE_CURRENT_SOURCE_DIR}/headers/MorseElement.h
    ${CMAKE_CURRENT_SOURCE_DIR}/headers/MorseDictionary.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/headers/MorseRenderer.h
    PARENT_SCOPE
 )
 set(SOURCE
@@ -13,5 +14,6 @@ set(SOURCE
    ${CMAKE_CURRENT_SOURCE_DIR}/implementation/MorseWriter.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/implementation/MorseDataSource.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/implementation/MorseDictionary.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/implementation/MorseRenderer.cpp
    PARENT_SCOPE
 )

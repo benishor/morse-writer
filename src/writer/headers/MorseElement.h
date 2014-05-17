@@ -1,7 +1,7 @@
 #pragma once
 
 enum class MorseElement {
-	None,
+    None,
     Dot,
     Dash,
     SilentDot,

@@ -15,3 +15,7 @@ What it does:
 TODO:
 	- configurable samplerate
 	- configurable output channels (mono/stereo)
+
+Questions:
+	- how to test Oscillator?
+	- how to test renderer?
