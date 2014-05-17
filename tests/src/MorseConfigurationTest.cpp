@@ -35,8 +35,8 @@ TEST(ReadConfiguration_succes) {
         "-p", "1.234"
     };
 
-	MorseWriterConfiguration && config = readConfiguration(commandLineArguments);
-	
+    MorseWriterConfiguration&&  config = readConfiguration(commandLineArguments);
+
     CHECK_EQUAL(config.inputFilename, "input.txt");
     CHECK_EQUAL(config.outputFilename, "output.wav");
     CHECK_EQUAL(config.punchiness, 1.234f);
