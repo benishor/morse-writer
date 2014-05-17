@@ -32,6 +32,9 @@ int main(int argc, char** argv) {
 		std::cerr << std::endl << "Error: " << e.what() << std::endl;
 		showUsage(std::string(argv[0]));
 		return 1;
+	} catch (const MorseWriterException& e) {
+		std::cerr << "Error: " << e.what() << std::endl;
+		return 1;
 	}
 
 	return 0;
