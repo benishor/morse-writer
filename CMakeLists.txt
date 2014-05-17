@@ -23,15 +23,15 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -g")
 #endif()
 
 
-add_subdirectory(configuration)
+#add_subdirectory(configuration)
 #add_subdirectory(renderer)
 add_subdirectory(utils)
-#add_subdirectory(writer)
+add_subdirectory(writer)
 
-include_directories(configuration/headers)
+#include_directories(configuration/headers)
 #include_directories(renderer/headers)
 include_directories(utils/headers)
-#include_directories(writer/headers)
+include_directories(writer/headers)
 
 
 # add the executable

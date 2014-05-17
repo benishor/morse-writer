@@ -1,7 +1,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <stdio.h>
-#include <MorseWriterConfiguration.h>
+#include <MorseWriter.h>
 
 
 void showUsage(const std::string& programName) {
@@ -17,15 +17,6 @@ void showUsage(const std::string& programName) {
 }
 
 
-class MorseWriter {
-public:
-
-	explicit MorseWriter(const MorseWriterConfiguration& config) {
-	}
-
-	void write() {
-	}
-};
 
 int main(int argc, char** argv) {
 
