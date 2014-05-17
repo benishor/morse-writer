@@ -1,12 +1,17 @@
-set(SOURCE
-   ${SOURCE}
-   ${CMAKE_CURRENT_SOURCE_DIR}/implementation/MorseWriterConfiguration.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/implementation/MorseWriter.cpp
-   PARENT_SCOPE
-)
 set(HEADERS
    ${HEADERS}
    ${CMAKE_CURRENT_SOURCE_DIR}/headers/MorseWriter.h
    ${CMAKE_CURRENT_SOURCE_DIR}/headers/MorseWriterConfiguration.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/headers/MorseDataSource.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/headers/MorseElement.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/headers/MorseDictionary.h
+   PARENT_SCOPE
+)
+set(SOURCE
+   ${SOURCE}
+   ${CMAKE_CURRENT_SOURCE_DIR}/implementation/MorseWriterConfiguration.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/implementation/MorseWriter.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/implementation/MorseDataSource.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/implementation/MorseDictionary.cpp
    PARENT_SCOPE
 )

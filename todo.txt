@@ -11,3 +11,7 @@ Usage:
 What it does:
 	- reads the specified file and renders it as wav into the specified output file
 	- unknown characters are translated to ?
+
+TODO:
+	- configurable samplerate
+	- configurable output channels (mono/stereo)

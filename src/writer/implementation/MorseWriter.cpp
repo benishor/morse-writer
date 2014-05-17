@@ -1,4 +1,6 @@
 #include <MorseWriter.h>
+#include <MorseDataSource.h>
+#include <MorseDictionary.h>
 #include <iostream>
 #include <fstream>
 #include <algorithm>
@@ -24,17 +26,7 @@ string getFileContent(const string& filename) {
     return result;
 }
 
-inline bool isValidCharacter(char val) {
-    return isalpha(val) ||
-           isdigit(val) ||
-           val == ' ' ||
-           val == '.' ||
-           val == '?' ||
-           val == ',' ||
-           val == '!';
-}
-
-string filterContent(string& content) {
+string filterContent(string& content, const MorseDictionary& dictionary) {
     // Unfortunatelly gcc 4.8.2 does not yet have support for regex
 
     // Transform new lines into spaces so that we won't have
@@ -44,8 +36,8 @@ string filterContent(string& content) {
     });
 
     // Remove invalid characters from the string
-    content.erase(remove_if(content.begin(), content.end(), [](char val) {
-        return !isValidCharacter(val);
+    content.erase(remove_if(content.begin(), content.end(), [dictionary](char val) {
+        return !dictionary.contains(val);
     }), content.end());
 
     return content;
@@ -56,13 +48,12 @@ MorseWriter::MorseWriter(const MorseWriterConfiguration& config)
 }
 
 void MorseWriter::write() {
-
     cout << "Rendering " << configuration.inputFilename
          << " into " << configuration.outputFilename
          << " ..." << endl;
 
+    MorseDictionary dictionary = MorseDictionary::defaultDictionary();
     string&& content = getFileContent(configuration.inputFilename);
-    content = filterContent(content);
-    cout << "Read content is: [" << content << "]" << endl;
+    content = filterContent(content, dictionary);
 }
 

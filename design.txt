@@ -1,0 +1,40 @@
+
+class MorseRenderer {
+public:
+
+    explicit MorseRenderer(MorseDataSource& dataSource) {}
+
+    bool finished() {
+        return false;
+    }
+
+    int render(void* buffer, int maxSamples) {
+        return -1;
+    }
+
+};
+
+class WavWriter {
+public:
+    explicit WavWriter(const std::string& filename) {}
+    void begin() {}
+    void end() {}
+    void write(void* buffer, int samples) {}
+};
+
+
+    MorseDataSource dataSource = MorseDataSource(content, MorseDictionary::defaultDictionary());
+    MorseRenderer renderer = MorseRenderer(dataSource);
+
+    WavWriter wavWriter = WavWriter(configuration.outputFilename);
+    wavWriter.begin();
+
+    const int SAMPLES = 1024;
+    short buffer[SAMPLES];
+
+    while (!renderer.finished()) {
+        int renderedSamples = renderer.render(buffer, SAMPLES);
+        wavWriter.write(buffer, renderedSamples);
+    }
+
+    wavWriter.end();
