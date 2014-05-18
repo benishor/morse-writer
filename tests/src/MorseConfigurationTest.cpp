@@ -15,7 +15,7 @@ TEST(Configuration_defaultValues) {
 }
 
 TEST(ReadConfiguration_missingInputArguments) {
-    vector<string> argumentsToCheckForMissingValues {"-i", "-o", "-s", "-f", "-p", "-sr", "-c"};
+    vector<string> argumentsToCheckForMissingValues {"-i", "-o", "-s", "-f", "-p", "-sr", "-c", "-sf"};
     for (auto argument : argumentsToCheckForMissingValues) {
 
         vector<string> commandLineArguments { argument };
@@ -35,7 +35,7 @@ TEST(ReadConfiguration_succes) {
         "-p", "1.234",
         "-sr", "22050",
         "-c", "2",
-
+        "-sf", "30"
     };
 
     MorseWriterConfiguration&&  config = readConfiguration(commandLineArguments);
@@ -47,5 +47,29 @@ TEST(ReadConfiguration_succes) {
     CHECK_EQUAL(config.speedInWpm, 33);
     CHECK_EQUAL(config.sampleRate, 22050);
     CHECK_EQUAL(config.channels, 2);
+    CHECK_EQUAL(config.farnsworthSpeedInWpm, 30);
 }
 
+
+TEST(ReadConfiguration_farnsworthSetAsSpeedIfNotSpecified) {
+    vector<string> commandLineArguments {
+        "-s", "33"
+    };
+
+    MorseWriterConfiguration&&  config = readConfiguration(commandLineArguments);
+    CHECK_EQUAL(config.speedInWpm, 33);
+    CHECK_EQUAL(config.farnsworthSpeedInWpm, 33);
+}
+
+TEST(ValidateConfiguration_farnsworthMustBeLessThanSpeed) {
+    vector<string> commandLineArguments {
+        "-s", "33",
+        "-sf", "34"
+    };
+
+    MorseWriterConfiguration&& config = readConfiguration(commandLineArguments);
+    CHECK_THROW(
+        validateConfiguration(config),
+        BadConfigurationException
+    );
+}

@@ -8,6 +8,7 @@ struct MorseWriterConfiguration {
     std::string inputFilename;
     std::string outputFilename;
     int speedInWpm = 20;
+    int farnsworthSpeedInWpm = 20;
     int frequency = 600;
     int sampleRate = 44100;
     int channels = 1;

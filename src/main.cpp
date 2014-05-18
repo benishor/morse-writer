@@ -11,6 +11,7 @@ void showUsage(const std::string& programName) {
     std::cout << "\tOptional arguments:" << std::endl;
     std::cout << std::endl;
     std::cout << "\t\t-s speedInWpm. Integer, defaults to 20" << std::endl;
+    std::cout << "\t\t-sf Farsnworth feel-like speed. Integer, defaults to configured speed" << std::endl;
     std::cout << "\t\t-f frequencyInHz, Integer, defaults to 600" << std::endl;
     std::cout << "\t\t-p punchiness. Float, defaults to 1" << std::endl;
     std::cout << "\t\t-sr samplerate. Integer, defaults to 44100" << std::endl;

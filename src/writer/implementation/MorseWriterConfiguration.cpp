@@ -4,6 +4,9 @@
 MorseWriterConfiguration readConfiguration(const std::vector<std::string> args) throw (ConfigurationException) {
     MorseWriterConfiguration config;
 
+    bool speedSpecified = false;
+    bool farnsworthSpecified = false;
+
     for (int index = 0; index < args.size(); index++) {
         const std::string& i = args[index++];
 
@@ -23,6 +26,14 @@ MorseWriterConfiguration readConfiguration(const std::vector<std::string> args) 
             } else if (i == "-s") {
                 if (index < args.size()) {
                     config.speedInWpm = std::stoi(args[index]);
+                    speedSpecified = true;
+                } else {
+                    throw MissingArgumentValueException(i);
+                }
+            } else if (i == "-sf") {
+                if (index < args.size()) {
+                    config.farnsworthSpeedInWpm = std::stoi(args[index]);
+                    farnsworthSpecified = true;
                 } else {
                     throw MissingArgumentValueException(i);
                 }
@@ -58,6 +69,10 @@ MorseWriterConfiguration readConfiguration(const std::vector<std::string> args) 
         }
     }
 
+    if (speedSpecified && !farnsworthSpecified) {
+        config.farnsworthSpeedInWpm = config.speedInWpm;
+    }
+
     return config;
 }
 
@@ -72,6 +87,14 @@ void validateConfiguration(const MorseWriterConfiguration& config) throw (Config
 
     if (config.speedInWpm < 5 || config.speedInWpm > 1000) {
         throw BadConfigurationException("Speed out of range [5...1000] WPM");
+    }
+
+    if (config.farnsworthSpeedInWpm < 5 || config.farnsworthSpeedInWpm > 1000) {
+        throw BadConfigurationException("Farnsworth speed out of range [5...1000] WPM");
+    }
+
+    if (config.farnsworthSpeedInWpm > config.speedInWpm) {
+        throw BadConfigurationException("Farnsworth speed must be less or equal to configured speed");
     }
 
     if (config.frequency < 10 || config.speedInWpm > 4000) {

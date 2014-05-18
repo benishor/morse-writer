@@ -45,7 +45,7 @@ void MorseWriter::write() {
     audioSettings.channels = configuration.channels;
 
     MorseCodeStyle style;
-    MorseCodeSpeed speed = MorseCodeSpeed::fromParisWpmAndStyle(configuration.speedInWpm, style);
+    MorseCodeSpeed speed = MorseCodeSpeed::fromFarnsworthAndStyle(configuration.speedInWpm, configuration.farnsworthSpeedInWpm, style);
 
     MorseDataSource dataSource = MorseDataSource(content, dictionary);
     MorseRenderer renderer = MorseRenderer(dataSource, audioSettings, configuration.frequency, configuration.punchiness, speed);
