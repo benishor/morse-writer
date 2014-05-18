@@ -78,7 +78,11 @@ void validateConfiguration(const MorseWriterConfiguration& config) throw (Config
         throw BadConfigurationException("Frequency out of range [10...4000] Hz");
     }
 
-    if (config.punchiness < 0 || config.punchiness > 20) {
-        throw BadConfigurationException("Punchiness out of range [0...20]");
+    if (config.punchiness < 1 || config.punchiness > 20) {
+        throw BadConfigurationException("Punchiness out of range [1...20]");
+    }
+
+    if (config.channels < 1 || config.channels > 2) {
+        throw BadConfigurationException("Channels out of range [1...2]");
     }
 }

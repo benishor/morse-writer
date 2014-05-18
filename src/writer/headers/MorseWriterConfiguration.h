@@ -11,7 +11,7 @@ struct MorseWriterConfiguration {
     int frequency = 600;
     int sampleRate = 44100;
     int channels = 1;
-    float punchiness = 0.0f;
+    float punchiness = 1.0f;
 };
 
 class ConfigurationException : public std::exception {

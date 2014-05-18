@@ -48,7 +48,7 @@ void MorseWriter::write() {
     MorseCodeSpeed speed = MorseCodeSpeed::fromParisWpmAndStyle(configuration.speedInWpm, style);
 
     MorseDataSource dataSource = MorseDataSource(content, dictionary);
-    MorseRenderer renderer = MorseRenderer(dataSource, audioSettings, configuration.frequency, speed);
+    MorseRenderer renderer = MorseRenderer(dataSource, audioSettings, configuration.frequency, configuration.punchiness, speed);
 
     const int SAMPLES = 1024;
     short buffer[SAMPLES];

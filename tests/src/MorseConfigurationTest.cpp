@@ -9,19 +9,19 @@ TEST(Configuration_defaultValues) {
 
     CHECK_EQUAL(config.inputFilename, "");
     CHECK_EQUAL(config.outputFilename, "");
-    CHECK_EQUAL(config.punchiness, 0.f);
+    CHECK_EQUAL(config.punchiness, 1.f);
     CHECK_EQUAL(config.frequency, 600);
     CHECK_EQUAL(config.speedInWpm, 20);
 }
 
 TEST(ReadConfiguration_missingInputArguments) {
-    vector<string> argumentsToCheckForMissingValues {"-i", "-o", "-s", "-f", "-p"};
+    vector<string> argumentsToCheckForMissingValues {"-i", "-o", "-s", "-f", "-p", "-sr", "-c"};
     for (auto argument : argumentsToCheckForMissingValues) {
 
         vector<string> commandLineArguments { argument };
         CHECK_THROW(
             MorseWriterConfiguration && config = readConfiguration(commandLineArguments),
-            ConfigurationException
+            MissingArgumentValueException
         );
     }
 }
@@ -32,7 +32,10 @@ TEST(ReadConfiguration_succes) {
         "-o", "output.wav",
         "-s", "33",
         "-f", "1234",
-        "-p", "1.234"
+        "-p", "1.234",
+        "-sr", "22050",
+        "-c", "2",
+
     };
 
     MorseWriterConfiguration&&  config = readConfiguration(commandLineArguments);
@@ -42,5 +45,7 @@ TEST(ReadConfiguration_succes) {
     CHECK_EQUAL(config.punchiness, 1.234f);
     CHECK_EQUAL(config.frequency, 1234);
     CHECK_EQUAL(config.speedInWpm, 33);
+    CHECK_EQUAL(config.sampleRate, 22050);
+    CHECK_EQUAL(config.channels, 2);
 }
 
