@@ -18,10 +18,12 @@ int sizeInSamplesFor(MorseElement element, const MorseCodeSpeed& speed, int samp
     }
 }
 
-MorseRenderer::MorseRenderer(MorseDataSource& stream, const AudioSettings& audioSet, const MorseCodeSpeed& spd)
+MorseRenderer::MorseRenderer(MorseDataSource& stream, const AudioSettings& audioSet, int frequency, const MorseCodeSpeed& spd)
     : dataSource(stream),
       audioSettings(audioSet),
       speed(spd) {
+        oscillator.setSampleRate(audioSettings.sampleRate);
+        oscillator.setFrequency(frequency);
 }
 
 bool MorseRenderer::finished() const {

@@ -32,6 +32,18 @@ MorseWriterConfiguration readConfiguration(const std::vector<std::string> args) 
                 } else {
                     throw MissingArgumentValueException(i);
                 }
+            } else if (i == "-sr") {
+                if (index < args.size()) {
+                    config.sampleRate = std::stoi(args[index]);
+                } else {
+                    throw MissingArgumentValueException(i);
+                }
+            } else if (i == "-c") {
+                if (index < args.size()) {
+                    config.channels = std::stoi(args[index]);
+                } else {
+                    throw MissingArgumentValueException(i);
+                }
             } else if (i == "-p") {
                 if (index < args.size()) {
                     config.punchiness = std::stof(args[index]);

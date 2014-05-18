@@ -9,6 +9,8 @@ struct MorseWriterConfiguration {
     std::string outputFilename;
     int speedInWpm = 20;
     int frequency = 600;
+    int sampleRate = 44100;
+    int channels = 1;
     float punchiness = 0.0f;
 };
 
