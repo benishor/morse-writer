@@ -24,6 +24,17 @@ MorseDictionary MorseDictionary::defaultDictionary() {
     .add('6', "-....").add('7', "--...").add('8', "---..")
     .add('9', "----.");
 
+    result
+    .add('.', ".-.-.-")
+    .add(',', "--..--")
+    .add('?', "..--..")
+    .add('=', "-...-")
+    .add('-', "-....-")
+    .add('/', "-..-.")
+    .add('"', ".----.")
+    .add('(', "-.--.")
+    .add(')', "-.--.-");
+
     return result;
 }
 
@@ -65,4 +76,3 @@ std::string& MorseDictionary::filter(std::string& content) const {
 
     return content;
 }
-
