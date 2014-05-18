@@ -5,6 +5,7 @@
 #include <iostream>
 #include <fstream>
 #include <algorithm>
+#include <WavWriter.h>
 
 using namespace std;
 
@@ -45,11 +46,16 @@ void MorseWriter::write() {
     const int SAMPLES = 1024;
     short buffer[SAMPLES];
 
-    ofstream out(configuration.outputFilename, ios::binary);
+    AudioSettings audioSettings;
+    audioSettings.sampleRate = 44100;
+    audioSettings.channels = 1;
+
+    WavWriter wavWriter(audioSettings, configuration.outputFilename);
+    wavWriter.begin();
     while (!renderer.finished()) {
-        int renderedSamples = renderer.render(buffer, SAMPLES);
-        out.write((char*)buffer, sizeof(short)*SAMPLES);
+        renderer.render(buffer, SAMPLES);
+        wavWriter.write(buffer, SAMPLES);
     }
-    out.close();
+    wavWriter.end();
 }
 
