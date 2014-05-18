@@ -4,6 +4,7 @@
 MorseDataSource::MorseDataSource(const std::string& text, const MorseDictionary& dict)
     : content(text),
       dictionary(dict) {
+    dictionary.filter(content);
     crackIntoElements();
 }
 

@@ -1,5 +1,6 @@
 #include <MorseDictionary.h>
 #include <iostream>
+#include <algorithm>
 
 MorseDictionary::MorseDictionary() {
     // std::cout << "Creating morse dictionary instance" << std::endl;
@@ -26,15 +27,13 @@ MorseDictionary MorseDictionary::defaultDictionary() {
     return result;
 }
 
-static std::string defaultTemplate = "";
-
-MorseDictionary& MorseDictionary::add(char character, const std::string morsePattern) {
+MorseDictionary& MorseDictionary::add(char character, const std::string& morsePattern) {
     dictionary.insert(std::pair<char, const std::string&>(std::toupper(character), morsePattern));
     dictionary.insert(std::pair<char, const std::string&>(std::tolower(character), morsePattern));
     return *this;
 }
 
-static std::string EMPTY_PATTERN;
+const static std::string EMPTY_PATTERN {""};
 
 bool MorseDictionary::contains(char character) const {
     auto it = dictionary.find(character);
@@ -49,3 +48,21 @@ const std::string& MorseDictionary::characterTemplate(char character) const {
         return it->second;
     }
 }
+
+std::string& MorseDictionary::filter(std::string& content) const {
+    // Unfortunatelly gcc 4.8.2 does not yet have support for regex
+
+    // Transform new lines into spaces so that we won't have
+    // sentences on subsequent lines starting one after another
+    for_each(content.begin(), content.end(), [](char& val) {
+        val = val == '\n' ? ' ' : val;
+    });
+
+    // Remove invalid characters from the string
+    content.erase(remove_if(content.begin(), content.end(), [this](char val) {
+        return val != ' ' && !this->contains(val);
+    }), content.end());
+
+    return content;
+}
+

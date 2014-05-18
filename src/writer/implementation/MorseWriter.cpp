@@ -27,23 +27,6 @@ string getFileContent(const string& filename) {
     return result;
 }
 
-string filterContent(string& content, const MorseDictionary& dictionary) {
-    // Unfortunatelly gcc 4.8.2 does not yet have support for regex
-
-    // Transform new lines into spaces so that we won't have
-    // sentences on subsequent lines starting one after another
-    for_each(content.begin(), content.end(), [](char& val) {
-        val = val == '\n' ? ' ' : val;
-    });
-
-    // Remove invalid characters from the string
-    content.erase(remove_if(content.begin(), content.end(), [dictionary](char val) {
-        return val != ' ' && !dictionary.contains(val);
-    }), content.end());
-
-    return content;
-}
-
 MorseWriter::MorseWriter(const MorseWriterConfiguration& config)
     : configuration(config) {
 }
@@ -55,7 +38,6 @@ void MorseWriter::write() {
 
     MorseDictionary dictionary = MorseDictionary::defaultDictionary();
     string&& content = getFileContent(configuration.inputFilename);
-    content = filterContent(content, dictionary);
 
     MorseDataSource dataSource = MorseDataSource(content, dictionary);
     MorseRenderer renderer = MorseRenderer(dataSource);
