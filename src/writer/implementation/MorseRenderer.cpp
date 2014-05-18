@@ -2,25 +2,31 @@
 #include <iostream>
 #include <string.h> // for memset
 
-MorseRenderer::MorseRenderer(MorseDataSource& stream)
-    : dataSource(stream) {
+int sizeInSamplesFor(MorseElement element, const MorseCodeSpeed& speed, int samplerate) {
+    switch (element) {
+        case MorseElement::Dot:
+        case MorseElement::SilentDot:
+            return (speed.dotSizeInMilliseconds/1000.0) * samplerate;
+        case MorseElement::Dash:
+            return (speed.dashSizeInMilliseconds/1000.0) * samplerate;
+        case MorseElement::SpaceBetweenChars:
+            return (speed.spaceBetweenCharsInMilliseconds/1000.0) * samplerate;
+        case MorseElement::SpaceBetweenWords:
+            return (speed.spaceBetweenWordsInMilliseconds/1000.0) * samplerate;
+        default:
+            return 0;
+    }
+}
+
+MorseRenderer::MorseRenderer(MorseDataSource& stream, const AudioSettings& audioSet, const MorseCodeSpeed& spd)
+    : dataSource(stream),
+      audioSettings(audioSet),
+      speed(spd) {
 }
 
 bool MorseRenderer::finished() const {
     return dataSource.finished() && currentElementRemainingSamples <= 0;
 }
-
-std::string as_string(MorseElement element) {
-    switch (element) {
-    case MorseElement::Dot: return "Dot";
-    case MorseElement::SilentDot: return "SilentDot";
-    case MorseElement::Dash: return "Dash";
-    case MorseElement::SpaceBetweenChars: return "SpaceBetweenChars";
-    case MorseElement::SpaceBetweenWords: return "SpaceBetweenWords";
-    default: return "unknown";
-    }
-}
-
 
 int MorseRenderer::render(short* buffer, int maxSamples) {
     int renderedSamples = 0;
@@ -30,7 +36,7 @@ int MorseRenderer::render(short* buffer, int maxSamples) {
 
         if (currentElementRemainingSamples <= 0) {
             currentElement = dataSource.get();
-            currentElementRemainingSamples = speed.sizeInSamplesFor(currentElement);
+            currentElementRemainingSamples = sizeInSamplesFor(currentElement, speed, audioSettings.sampleRate);
         }
 
         int samplesToRenderNow = currentElement == MorseElement::None ?

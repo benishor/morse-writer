@@ -8,6 +8,8 @@ set(HEADERS
    ${CMAKE_CURRENT_SOURCE_DIR}/headers/MorseRenderer.h
    ${CMAKE_CURRENT_SOURCE_DIR}/headers/AudioSettings.h
    ${CMAKE_CURRENT_SOURCE_DIR}/headers/WavWriter.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/headers/MorseCodeStyle.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/headers/MorseCodeSpeed.h
    PARENT_SCOPE
 )
 set(SOURCE
@@ -18,5 +20,6 @@ set(SOURCE
    ${CMAKE_CURRENT_SOURCE_DIR}/implementation/MorseDictionary.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/implementation/MorseRenderer.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/implementation/WavWriter.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/implementation/MorseCodeSpeed.cpp
    PARENT_SCOPE
 )

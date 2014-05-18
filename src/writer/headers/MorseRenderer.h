@@ -1,32 +1,15 @@
 #pragma once
 
 #include <MorseDataSource.h>
+#include <AudioSettings.h>
+#include <MorseCodeSpeed.h>
 
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-class MorseSpeed {
-public:
-    int sizeInSamplesFor(MorseElement element) {
-        switch (element) {
-        case MorseElement::Dot:
-        case MorseElement::SilentDot:
-            return 1840;
-        case MorseElement::Dash:
-            return 1840*3;
-        case MorseElement::SpaceBetweenChars:
-            return 1840*3;
-        case MorseElement::SpaceBetweenWords:
-            return 1840*7;
-        default:
-            return 0;
-        }
-    }
-};
 
 class Oscillator {
 public:
-
     explicit Oscillator(double sr)
         : sampleRate(sr) {
         setFrequency(500);
@@ -51,10 +34,10 @@ private:
 
 class MorseRenderer {
 public:
-    explicit MorseRenderer(MorseDataSource& dataSource);
+    explicit MorseRenderer(MorseDataSource& dataSource, const AudioSettings& audioSettings, const MorseCodeSpeed& speed);
 
-    bool    finished() const;
-    int     render(short* buffer, int maxSamples);
+    bool finished() const;
+    int render(short* buffer, int maxSamples);
 
 private:
 
@@ -64,6 +47,8 @@ private:
     MorseElement currentElement = MorseElement::None;
 
     Oscillator oscillator {44100.0};
+
     MorseDataSource& dataSource;
-    MorseSpeed speed;
+    const AudioSettings& audioSettings;
+    const MorseCodeSpeed& speed;
 };
