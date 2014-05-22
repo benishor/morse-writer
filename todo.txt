@@ -15,7 +15,7 @@ What it does:
 TODO:
 	DONE - configurable samplerate
 	DONE - farnsworth speed 
-	- configurable output channels (mono/stereo)
+	DONE - configurable output channels (mono/stereo)
 	- configurable phase difference when stereo
 	- configurable panning when stereo
 	- configurable dash/dot ratio
