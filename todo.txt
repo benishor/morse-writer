@@ -14,11 +14,18 @@ What it does:
 
 TODO:
 	DONE - configurable samplerate
-	- farnsworth speed 
+	DONE - farnsworth speed 
 	- configurable output channels (mono/stereo)
 	- configurable phase difference when stereo
 	- configurable panning when stereo
 	- configurable dash/dot ratio
+	- refactor to keep all settings the renderer needs in a MorseCodeRendererSettings struct
+	- use rtaudio for realtime audio output (https://github.com/thestk/rtaudio)
+	- figure out a function for punchiness that is speed independent. Make a study of how the spectrum is affected at different speeds/punchiness settings using spek.cc specrogram software
+	- settle on a crossplatform gui framework to be used
+	- figure out how the training game will look like. Expose rendering engine and forms to script. Investigate what does it take to make the game rounds scriptable. The gameplay should be simple and addictive.
+	- start to think of a scoring method which takes in account how far you've gone, overall accuracy  and the number of characters recognised. 
+	- store statistics about top misinterpreted characters and use them to bias the selection of "random" characters.
 
 
 Questions:

@@ -56,8 +56,8 @@ void MorseWriter::write() {
     WavWriter wavWriter(audioSettings, configuration.outputFilename);
     wavWriter.begin();
     while (!renderer.finished()) {
-        renderer.render(buffer, SAMPLES);
-        wavWriter.write(buffer, SAMPLES);
+        renderer.render(buffer, SAMPLES / audioSettings.channels);
+        wavWriter.write(buffer, SAMPLES / audioSettings.channels);
     }
     wavWriter.end();
 }

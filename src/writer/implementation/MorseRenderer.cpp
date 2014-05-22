@@ -76,9 +76,9 @@ bool MorseRenderer::finished() const {
     return dataSource.finished() && currentElementRemainingSamples <= 0;
 }
 
-int MorseRenderer::render(short* buffer, int maxSamples) {
+int MorseRenderer::render(short* buffer, int bufferSizeInSamples) {
     int renderedSamples = 0;
-    int remainingSamples = maxSamples;
+    int remainingSamples = bufferSizeInSamples;
 
     while (remainingSamples > 0) {
 
@@ -92,14 +92,14 @@ int MorseRenderer::render(short* buffer, int maxSamples) {
                                  remainingSamples :
                                  std::min(currentElementRemainingSamples, remainingSamples);
 
-        renderPartial(buffer + renderedSamples, samplesToRenderNow);
+        renderPartial(buffer + renderedSamples * audioSettings.channels, samplesToRenderNow);
 
         renderedSamples += samplesToRenderNow;
         remainingSamples -= samplesToRenderNow;
         currentElementRemainingSamples -= samplesToRenderNow;
     }
 
-    return renderedSamples;
+    return renderedSamples * audioSettings.channels;
 }
 
 
@@ -108,19 +108,25 @@ void MorseRenderer::renderPartial(short* buffer, int samples) {
     case MorseElement::Dot: {
         double* ampBuffer = &dotShapingBuffer[currentElementSamples - currentElementRemainingSamples];
         while (samples--) {
-            *buffer++ = (short)(oscillator.tick() * 32767.0 * *ampBuffer++);
+            double value = (short)(oscillator.tick() * 32767.0 * *ampBuffer++);
+            for (int i = 0; i < audioSettings.channels; i++) {
+                *buffer++ = value;
+            }
         }
     }
     break;
     case MorseElement::Dash: {
         double* ampBuffer = &dashShapingBuffer[currentElementSamples - currentElementRemainingSamples];
         while (samples--) {
-            *buffer++ = (short)(oscillator.tick() * 32767.0 * *ampBuffer++);
+            double value = (short)(oscillator.tick() * 32767.0 * *ampBuffer++);
+            for (int i = 0; i < audioSettings.channels; i++) {
+                *buffer++ = value;
+            }
         }
     }
     break;
     default:
-        memset(buffer, 0, sizeof(short) * samples);
+        memset(buffer, 0, sizeof(short) * samples * audioSettings.channels);
         break;
     }
 }
