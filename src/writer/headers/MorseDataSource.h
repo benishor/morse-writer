@@ -6,7 +6,9 @@
 
 class MorseDataSource {
 public:
-    explicit MorseDataSource(const std::string& text, const MorseDictionary& dictionary);
+    MorseDataSource() = default;
+    MorseDataSource(const std::string& text, const MorseDictionary& dictionary);
+    MorseDataSource(const MorseDataSource&);
 
     MorseElement get();
     bool finished() const;
@@ -18,6 +20,6 @@ private:
     void addElementsForCharacter(char character);
 
     std::string content;
-    const MorseDictionary& dictionary;
+    MorseDictionary dictionary;
     std::queue<MorseElement> elementQueue;
 };

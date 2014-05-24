@@ -20,31 +20,29 @@ int sizeInSamplesFor(MorseElement element, const MorseCodeSpeed& speed, int samp
     }
 }
 
-MorseRenderer::MorseRenderer(MorseDataSource& stream, const AudioSettings& audioSet, int frequency, double punch, const MorseCodeSpeed& spd)
-    : dataSource(stream),
-      audioSettings(audioSet),
-      speed(spd),
-      punchiness(punch) {
-
-    oscillator.setSampleRate(audioSettings.sampleRate);
-    oscillator.setFrequency(frequency);
-
-    buildShapingBuffers();
+MorseRenderer::MorseRenderer() {
 }
 
 MorseRenderer::~MorseRenderer() {
-    if (dotShapingBuffer != NULL) {
+    if (dotShapingBuffer != nullptr) {
         delete [] dotShapingBuffer;
     }
 
-    if (dashShapingBuffer != NULL) {
+    if (dashShapingBuffer != nullptr) {
         delete [] dashShapingBuffer;
     }
 }
 
 void MorseRenderer::buildShapingBuffers() {
-    int dotSizeInSamples = sizeInSamplesFor(MorseElement::Dot, speed, audioSettings.sampleRate);
-    int dashSizeInSamples = sizeInSamplesFor(MorseElement::Dash, speed, audioSettings.sampleRate);
+    if (dotShapingBuffer != nullptr) {
+        delete [] dotShapingBuffer;
+    }
+
+    if (dashShapingBuffer != nullptr) {
+        delete [] dashShapingBuffer;
+    }
+    int dotSizeInSamples = sizeInSamplesFor(MorseElement::Dot, settings.speed, settings.audio.sampleRate);
+    int dashSizeInSamples = sizeInSamplesFor(MorseElement::Dash, settings.speed, settings.audio.sampleRate);
 
     dotShapingBuffer = new double[dotSizeInSamples];
     dashShapingBuffer = new double[dashSizeInSamples];
@@ -52,7 +50,7 @@ void MorseRenderer::buildShapingBuffers() {
     double shaping;
     for (int i = 0; i < dotSizeInSamples; i++) {
         shaping = sin(i * (M_PI / ((double) dotSizeInSamples - 1.0)));
-        shaping = shaping * punchiness;
+        shaping = shaping * settings.punchiness;
         shaping = std::min(shaping, 1.0);
         dotShapingBuffer[i] = shaping;
     }
@@ -65,12 +63,24 @@ void MorseRenderer::buildShapingBuffers() {
         } else if (i >= (dashSizeInSamples - HALF_DOT_SAMPLES)) {
             shaping = sin((dashSizeInSamples - i - 1) * (M_PI / (double) dotSizeInSamples));
         }
-        shaping = shaping * punchiness;
+        shaping = shaping * settings.punchiness;
         shaping = std::min(shaping, 1.0);
 
         dashShapingBuffer[i] = shaping;
     }
 }
+
+
+void MorseRenderer::feed(MorseDataSource& ds, MorseRendererSettings& renderSettings) {
+    dataSource = ds;
+    settings = renderSettings;
+
+    oscillator.setSampleRate(settings.audio.sampleRate);
+    oscillator.setFrequency(settings.frequency);
+
+    buildShapingBuffers();
+}
+
 
 bool MorseRenderer::finished() const {
     return dataSource.finished() && currentElementRemainingSamples <= 0;
@@ -84,7 +94,7 @@ int MorseRenderer::render(short* buffer, int bufferSizeInSamples) {
 
         if (currentElementRemainingSamples <= 0) {
             currentElement = dataSource.get();
-            currentElementSamples = sizeInSamplesFor(currentElement, speed, audioSettings.sampleRate);
+            currentElementSamples = sizeInSamplesFor(currentElement, settings.speed, settings.audio.sampleRate);
             currentElementRemainingSamples = currentElementSamples;
         }
 
@@ -92,14 +102,14 @@ int MorseRenderer::render(short* buffer, int bufferSizeInSamples) {
                                  remainingSamples :
                                  std::min(currentElementRemainingSamples, remainingSamples);
 
-        renderPartial(buffer + renderedSamples * audioSettings.channels, samplesToRenderNow);
+        renderPartial(buffer + renderedSamples * settings.audio.channels, samplesToRenderNow);
 
         renderedSamples += samplesToRenderNow;
         remainingSamples -= samplesToRenderNow;
         currentElementRemainingSamples -= samplesToRenderNow;
     }
 
-    return renderedSamples * audioSettings.channels;
+    return renderedSamples * settings.audio.channels;
 }
 
 
@@ -109,7 +119,7 @@ void MorseRenderer::renderPartial(short* buffer, int samples) {
         double* ampBuffer = &dotShapingBuffer[currentElementSamples - currentElementRemainingSamples];
         while (samples--) {
             double value = (short)(oscillator.tick() * 32767.0 * *ampBuffer++);
-            for (int i = 0; i < audioSettings.channels; i++) {
+            for (int i = 0; i < settings.audio.channels; i++) {
                 *buffer++ = value;
             }
         }
@@ -119,14 +129,14 @@ void MorseRenderer::renderPartial(short* buffer, int samples) {
         double* ampBuffer = &dashShapingBuffer[currentElementSamples - currentElementRemainingSamples];
         while (samples--) {
             double value = (short)(oscillator.tick() * 32767.0 * *ampBuffer++);
-            for (int i = 0; i < audioSettings.channels; i++) {
+            for (int i = 0; i < settings.audio.channels; i++) {
                 *buffer++ = value;
             }
         }
     }
     break;
     default:
-        memset(buffer, 0, sizeof(short) * samples * audioSettings.channels);
+        memset(buffer, 0, sizeof(short) * samples * settings.audio.channels);
         break;
     }
 }

@@ -8,6 +8,14 @@ MorseDataSource::MorseDataSource(const std::string& text, const MorseDictionary&
     crackIntoElements();
 }
 
+
+MorseDataSource::MorseDataSource(const MorseDataSource& other) 
+    : content(other.content), 
+      dictionary(other.dictionary) {
+    crackIntoElements();
+}
+
+
 MorseElement MorseDataSource::get() {
     MorseElement result = MorseElement::None;
     if (!elementQueue.empty()) {

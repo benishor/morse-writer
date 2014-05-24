@@ -6,15 +6,15 @@
 #include <Oscillator.h>
 
 struct MorseRendererSettings {
-    AudioSettings& audioSettings;
-    MorseCodeSpeed& speed;
+    AudioSettings audio;
+    MorseCodeSpeed speed = MorseCodeSpeed::defaultSpeed();
     int frequency;
     double punchiness;
 };
 
 class MorseRenderer {
 public:
-    explicit MorseRenderer(MorseDataSource& dataSource, const AudioSettings& audioSettings, int frequency, double punchiness, const MorseCodeSpeed& speed);
+    explicit MorseRenderer();
     virtual ~MorseRenderer();
 
     /**
@@ -25,8 +25,7 @@ public:
     bool finished() const;
 
 
-    // void setSettings(const MorseRendererSettings& settings);
-    // void setDataSource(MorseDataSource& dataSource);
+    void feed(MorseDataSource& dataSource, MorseRendererSettings& settings);
 
     /**
      * @brief [brief description]
@@ -40,6 +39,10 @@ public:
     int render(short* buffer, int bufferSizeInSamples);
 
 private:
+
+    MorseDataSource dataSource;
+    MorseRendererSettings settings;
+
     void buildShapingBuffers();
     void renderPartial(short* buffer, int samples);
 
@@ -49,11 +52,6 @@ private:
 
     Oscillator oscillator;
 
-    MorseDataSource& dataSource;
-    const AudioSettings& audioSettings;
-    const MorseCodeSpeed& speed;
-    double punchiness;
-
-    double* dotShapingBuffer;
-    double* dashShapingBuffer;
+    double* dotShapingBuffer = nullptr;
+    double* dashShapingBuffer = nullptr;
 };

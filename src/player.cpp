@@ -32,23 +32,31 @@ int outputCallback(void* outputBuffer,
 int main() {
 
     MorseDictionary dictionary = MorseDictionary::defaultDictionary();
-    AudioSettings audioSettings {44800, 2};
     MorseCodeStyle style;
     MorseCodeSpeed speed = MorseCodeSpeed::fromFarnsworthAndStyle(50, 50, style);
     MorseDataSource dataSource = MorseDataSource("cq cq cq de yo6ssw yo6ssw yo6ssw pse k", dictionary);
-    MorseRenderer renderer = MorseRenderer(dataSource, audioSettings, 600, 1, speed);
+
+    MorseRendererSettings settings;
+    settings.audio.sampleRate = 48000;
+    settings.audio.channels = 2;
+    settings.speed = speed;
+    settings.frequency = 600;
+    settings.punchiness = 1;
+
+    MorseRenderer renderer;
+    renderer.feed(dataSource, settings);
 
     RtAudio dac;
 
     RtAudio::StreamParameters oParams;
     oParams.deviceId = dac.getDefaultOutputDevice();
-    oParams.nChannels = audioSettings.channels;
+    oParams.nChannels = settings.audio.channels;
     oParams.firstChannel = 0;
 
-    unsigned int bufferFrames = 128;
+    unsigned int bufferFrames = 64;
 
     try {
-        dac.openStream(&oParams, NULL, RTAUDIO_SINT16, audioSettings.sampleRate, &bufferFrames, &outputCallback, &renderer);
+        dac.openStream(&oParams, NULL, RTAUDIO_SINT16, settings.audio.sampleRate, &bufferFrames, &outputCallback, &renderer);
         dac.startStream();
 
         while (dac.isStreamRunning()) {

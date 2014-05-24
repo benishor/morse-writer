@@ -49,3 +49,8 @@ MorseCodeSpeed MorseCodeSpeed::fromFarnsworthAndStyle(int characterWpm, int feel
 
     return speed;
 }
+
+MorseCodeSpeed MorseCodeSpeed::defaultSpeed() {
+    MorseCodeStyle style;
+    return fromParisWpmAndStyle(20, style);
+}
