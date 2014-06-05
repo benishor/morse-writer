@@ -4,6 +4,8 @@ set(HEADERS
    ${CMAKE_CURRENT_SOURCE_DIR}/headers/MorseWriterConfiguration.h
    ${CMAKE_CURRENT_SOURCE_DIR}/headers/MorseDataSource.h
    ${CMAKE_CURRENT_SOURCE_DIR}/headers/MorseElement.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/headers/MorseEvent.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/headers/MorseEvents.h
    ${CMAKE_CURRENT_SOURCE_DIR}/headers/MorseDictionary.h
    ${CMAKE_CURRENT_SOURCE_DIR}/headers/MorseRenderer.h
    ${CMAKE_CURRENT_SOURCE_DIR}/headers/AudioSettings.h

@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include <queue>
-#include <MorseElement.h>
+#include <MorseEvent.h>
 #include <MorseDictionary.h>
 
 class MorseDataSource {
@@ -10,8 +10,9 @@ public:
     MorseDataSource(const std::string& text, const MorseDictionary& dictionary);
     MorseDataSource(const MorseDataSource&);
 
-    MorseElement get();
+    MorseEvent get();
     bool finished() const;
+    std::string getContent();
 
 private:
     void crackIntoElements();
@@ -21,5 +22,5 @@ private:
 
     std::string content;
     MorseDictionary dictionary;
-    std::queue<MorseElement> elementQueue;
+    std::queue<MorseEvent> eventQueue;
 };

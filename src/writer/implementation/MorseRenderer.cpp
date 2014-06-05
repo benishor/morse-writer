@@ -86,6 +86,22 @@ bool MorseRenderer::finished() const {
     return dataSource.finished() && currentElementRemainingSamples <= 0;
 }
 
+
+void MorseRenderer::addListener(MorseEventListener& listener) {
+    eventListeners.push_back(&listener);
+}
+
+void MorseRenderer::removeListener(MorseEventListener& listener) {
+    auto it = std::begin(eventListeners);
+    while (it != std::end(eventListeners)) {
+        if (*it == &listener) {
+            eventListeners.erase(it);
+            return;
+        }
+    }
+}
+
+
 int MorseRenderer::render(short* buffer, int bufferSizeInSamples) {
     int renderedSamples = 0;
     int remainingSamples = bufferSizeInSamples;
@@ -93,9 +109,7 @@ int MorseRenderer::render(short* buffer, int bufferSizeInSamples) {
     while (remainingSamples > 0) {
 
         if (currentElementRemainingSamples <= 0) {
-            currentElement = dataSource.get();
-            currentElementSamples = sizeInSamplesFor(currentElement, settings.speed, settings.audio.sampleRate);
-            currentElementRemainingSamples = currentElementSamples;
+            selectNextElementToRender();
         }
 
         int samplesToRenderNow = currentElement == MorseElement::None ?
@@ -112,6 +126,21 @@ int MorseRenderer::render(short* buffer, int bufferSizeInSamples) {
     return renderedSamples * settings.audio.channels;
 }
 
+void MorseRenderer::selectNextElementToRender() {
+
+    MorseEvent event;
+
+    // Dispatch non-render events
+    while ((event = dataSource.get()).type != MorseEventType::ElementToRender) {
+        for (auto listener : eventListeners) {
+            listener->onMorseEvent(event);
+        }
+    }
+
+    currentElement = event.element;
+    currentElementSamples = sizeInSamplesFor(currentElement, settings.speed, settings.audio.sampleRate);
+    currentElementRemainingSamples = currentElementSamples;
+}
 
 void MorseRenderer::renderPartial(short* buffer, int samples) {
     switch (currentElement) {

@@ -38,3 +38,36 @@ public:
     }
 
     wavWriter.end();
+
+
+TDD for listening to rendering events
+=====================================
+
+- the rendering engine has no clue of what the latency is so it cannot take it in account when delivering rendering events. Or .. can it?
+
+MorseDataSource ds {"hello there", dictionary};
+ds.listenedBy(this);
+
+renderer.feed(ds, settings);
+while (!renderer.finished()) {
+    renderer.render();
+}
+
+
+void onMorseDataSourceEvent(MorseEvent& e) override {
+    switch (e.type) {
+        case MorseEventType::START_CHARACTER:
+                std::cout << "Starting to render character " << e.character().visual() << std::endl;
+            break;
+        case MorseEventType::END_CHARACTER:
+                std::cout << "Finished rendering character " << e.character().visual() << std::endl;
+            break;
+        default:
+                std::cout << "Not really interested in the rest of events" << std::endl;
+            break;
+    }
+}
+
+However, these timings should be delayed in the real client code by the amount of audio rendering latency (could RtAudio help here?).
+Now, whose responsibility is to delay the events?
+
