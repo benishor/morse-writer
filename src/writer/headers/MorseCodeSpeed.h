@@ -11,8 +11,4 @@ struct MorseCodeSpeed {
     static MorseCodeSpeed fromParisWpmAndStyle(int wpm, const MorseCodeStyle& style);
     static MorseCodeSpeed fromFarnsworthAndStyle(int characterWpm, int feelsLikeWpm, const MorseCodeStyle& style);
     static MorseCodeSpeed defaultSpeed();
-
-private:
-
-    MorseCodeSpeed();
 };

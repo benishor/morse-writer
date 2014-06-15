@@ -4,6 +4,13 @@
 class MorseEvents {
 public:
 
+    static MorseEvent newContent(const std::string& content) {
+        MorseEvent result;
+        result.type = MorseEventType::NewContent;
+        result.content = content;
+        return result;
+    }
+
     static MorseEvent startChar(char letter) {
         MorseEvent result;
         result.type = MorseEventType::StartChar;

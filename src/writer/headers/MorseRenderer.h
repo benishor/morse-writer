@@ -51,6 +51,7 @@ public:
      * @param dataSource the data source to be rendered until completion
      * @param settings the settings used to render the provided data source
      */
+    void feed(MorseDataSource&& dataSource, MorseRendererSettings& settings);
     void feed(MorseDataSource& dataSource, MorseRendererSettings& settings);
 
     /**
@@ -58,7 +59,7 @@ public:
      * @details [long description]
      * 
      * @param buffer [description]
-     * @param maxSamples [description]
+     * @param bufferSizeInSamples [description]
      * 
      * @return [description]
      */

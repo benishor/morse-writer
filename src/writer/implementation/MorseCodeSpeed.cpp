@@ -18,9 +18,6 @@ static double nonSpaceImpulsesInParis(const MorseCodeStyle& style) {
            NUMBER_OF_DASHES_IN_PARIS * style.dashDotRatio;
 }
 
-MorseCodeSpeed::MorseCodeSpeed() {
-}
-
 MorseCodeSpeed MorseCodeSpeed::fromParisWpmAndStyle(int wpm, const MorseCodeStyle& style) {
     double impulsesPerMinute = wpm * (nonSpaceImpulsesInParis(style) + spaceImpulsesInParis(style));
 

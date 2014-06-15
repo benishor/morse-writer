@@ -71,6 +71,16 @@ void MorseRenderer::buildShapingBuffers() {
 }
 
 
+void MorseRenderer::feed(MorseDataSource&& ds, MorseRendererSettings& renderSettings) {
+    dataSource = ds;
+    settings = renderSettings;
+
+    oscillator.setSampleRate(settings.audio.sampleRate);
+    oscillator.setFrequency(settings.frequency);
+
+    buildShapingBuffers();
+}
+
 void MorseRenderer::feed(MorseDataSource& ds, MorseRendererSettings& renderSettings) {
     dataSource = ds;
     settings = renderSettings;

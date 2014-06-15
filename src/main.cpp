@@ -28,7 +28,6 @@ int main(int argc, char** argv) {
 
         MorseWriter writer(config);
         writer.write();
-
     } catch (const ConfigurationException& e) {
         std::cerr << std::endl << "Error: " << e.what() << std::endl;
         showUsage(std::string(argv[0]));

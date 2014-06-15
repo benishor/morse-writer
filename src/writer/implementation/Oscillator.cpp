@@ -5,7 +5,7 @@
 #include <iostream>
 
 Oscillator::Oscillator()
-    : sampleRate(44100) {
+    : sampleRate(44100), phase(0), phaseAdd(0) {
     setFrequency(500);
 }
 

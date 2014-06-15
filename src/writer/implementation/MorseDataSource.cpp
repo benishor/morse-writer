@@ -42,6 +42,8 @@ void MorseDataSource::crackIntoElements() {
     std::queue<MorseEvent> emptyQueue;
     std::swap(eventQueue, emptyQueue);
 
+    eventQueue.push(MorseEvents::newContent(content));
+
     bool inWord = false;
     for (auto c : content) {
         if (c == SPACE_CHARACTER) {
@@ -56,6 +58,7 @@ void MorseDataSource::crackIntoElements() {
             inWord = true;
         }
     }
+    
     eventQueue.push(MorseEvents::eof());
 }
 
