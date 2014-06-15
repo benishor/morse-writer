@@ -15,6 +15,7 @@ set(HEADERS
    ${CMAKE_CURRENT_SOURCE_DIR}/headers/Oscillator.h
    ${CMAKE_CURRENT_SOURCE_DIR}/headers/MorsePlayer.h
    ${CMAKE_CURRENT_SOURCE_DIR}/headers/MorseEventDelayer.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/headers/Utils.h
    PARENT_SCOPE
 )
 set(SOURCE
