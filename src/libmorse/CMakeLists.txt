@@ -4,6 +4,8 @@ set(HEADERS
    ${CMAKE_CURRENT_SOURCE_DIR}/headers/MorseWriterConfiguration.h
    ${CMAKE_CURRENT_SOURCE_DIR}/headers/MorseDataSource.h
    ${CMAKE_CURRENT_SOURCE_DIR}/headers/MorseElement.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/headers/MorseEvent.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/headers/MorseEvents.h
    ${CMAKE_CURRENT_SOURCE_DIR}/headers/MorseDictionary.h
    ${CMAKE_CURRENT_SOURCE_DIR}/headers/MorseRenderer.h
    ${CMAKE_CURRENT_SOURCE_DIR}/headers/AudioSettings.h
@@ -11,6 +13,9 @@ set(HEADERS
    ${CMAKE_CURRENT_SOURCE_DIR}/headers/MorseCodeStyle.h
    ${CMAKE_CURRENT_SOURCE_DIR}/headers/MorseCodeSpeed.h
    ${CMAKE_CURRENT_SOURCE_DIR}/headers/Oscillator.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/headers/MorsePlayer.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/headers/MorseEventDelayer.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/headers/Utils.h
    PARENT_SCOPE
 )
 set(SOURCE
@@ -23,5 +28,7 @@ set(SOURCE
    ${CMAKE_CURRENT_SOURCE_DIR}/implementation/WavWriter.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/implementation/MorseCodeSpeed.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/implementation/Oscillator.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/implementation/MorsePlayer.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/implementation/MorseEventDelayer.cpp
    PARENT_SCOPE
 )

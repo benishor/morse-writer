@@ -1,5 +1,5 @@
 include_directories(
-	${morse-writer_SOURCE_DIR}/src/writer/headers
+	${morse-writer_SOURCE_DIR}/src/libmorse/headers
 	UnitTest++/src
 )
 

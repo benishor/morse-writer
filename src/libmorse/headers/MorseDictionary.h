@@ -62,5 +62,5 @@ public:
     std::string& filter(std::string& content) const;
 
 private:
-    std::map<char, const std::string> dictionary;
+    std::map<char, std::string> dictionary;
 };

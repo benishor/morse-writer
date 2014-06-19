@@ -1,15 +1,18 @@
 #pragma once
 #include <string>
 #include <queue>
-#include <MorseElement.h>
+#include <MorseEvent.h>
 #include <MorseDictionary.h>
 
 class MorseDataSource {
 public:
-    explicit MorseDataSource(const std::string& text, const MorseDictionary& dictionary);
+    MorseDataSource() = default;
+    MorseDataSource(const std::string& text, const MorseDictionary& dictionary);
+    MorseDataSource(const MorseDataSource&);
 
-    MorseElement get();
+    MorseEvent get();
     bool finished() const;
+    std::string getContent();
 
 private:
     void crackIntoElements();
@@ -18,6 +21,6 @@ private:
     void addElementsForCharacter(char character);
 
     std::string content;
-    const MorseDictionary& dictionary;
-    std::queue<MorseElement> elementQueue;
+    MorseDictionary dictionary;
+    std::queue<MorseEvent> eventQueue;
 };

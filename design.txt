@@ -38,3 +38,50 @@ public:
     }
 
     wavWriter.end();
+
+
+TDD for listening to rendering events
+=====================================
+
+- the rendering engine has no clue of what the latency is so it cannot take it in account when delivering rendering events. Or .. can it?
+
+MorseDataSource ds {"hello there", dictionary};
+ds.listenedBy(this);
+
+renderer.feed(ds, settings);
+while (!renderer.finished()) {
+    renderer.render();
+}
+
+
+void onMorseDataSourceEvent(MorseEvent& e) override {
+    switch (e.type) {
+        case MorseEventType::START_CHARACTER:
+                std::cout << "Starting to render character " << e.character().visual() << std::endl;
+            break;
+        case MorseEventType::END_CHARACTER:
+                std::cout << "Finished rendering character " << e.character().visual() << std::endl;
+            break;
+        default:
+                std::cout << "Not really interested in the rest of events" << std::endl;
+            break;
+    }
+}
+
+However, these timings should be delayed in the real client code by the amount of audio rendering latency (could RtAudio help here?).
+Now, whose responsibility is to delay the events?
+
+TDD for delaying events
+=======================
+
+The events have been implemented and are triggered by the MorseRenderer as it renders the elements pulled from the assigned data source.
+
+Now that we got the client of the renderer being notified by events all is nice and dandy, except for the fact that the events are not exactly synchronized with the moment they are being heard.
+
+What is happening here is that we are experimenting the sound system latency; depending on the configuration, the sound system may perform double (or n?) buffering for glitch-free sound and that means it asks us to render one or two buffers of sound *before* actually sending it to the DAC. This means that depending on the buffer size, we may experience less or more considerable delay.
+
+For example, if we use a samplerate of 22050 Hz and a buffer of 64 samples, the perceived delay will be ~3ms for double buffering. 3ms is not so bad and the human brain does not perceive this desync, but compare this to, say, using a buffer of 8192 samples with the same samplerate which equates to a whooping delay of ~372ms. That's a third of a second and your brain can definitely sense the discrepancy between the audio and visual feedback.
+
+So how are we to cure this? Since the events are generated *before* their visual feedback should appear, the natural thing to do is try and delay them by a certain amount. But what is that amount? Clearly a multiple of the buffer size, most likely 1 x buffer size.
+
+The chosen way to delay the events is to use the decorator pattern and write an event delayer that registers to the renderer and is responsible to delay events with a configurable amount of time.

@@ -47,8 +47,15 @@ void MorseWriter::write() {
     MorseCodeStyle style;
     MorseCodeSpeed speed = MorseCodeSpeed::fromFarnsworthAndStyle(configuration.speedInWpm, configuration.farnsworthSpeedInWpm, style);
 
-    MorseDataSource dataSource = MorseDataSource(content, dictionary);
-    MorseRenderer renderer = MorseRenderer(dataSource, audioSettings, configuration.frequency, configuration.punchiness, speed);
+    MorseRendererSettings rendererSettings;
+    rendererSettings.audio = audioSettings;
+    rendererSettings.speed = speed;
+    rendererSettings.frequency = configuration.frequency;
+    rendererSettings.punchiness = configuration.punchiness;
+
+    MorseDataSource dataSource = {content, dictionary};
+    MorseRenderer renderer;
+    renderer.feed(dataSource, rendererSettings);
 
     const int SAMPLES = 1024;
     short buffer[SAMPLES];

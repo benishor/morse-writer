@@ -8,3 +8,4 @@ enum class MorseElement {
     SpaceBetweenChars,
     SpaceBetweenWords
 };
+
