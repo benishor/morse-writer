@@ -3,16 +3,13 @@ morse-writer
 
 Utility program that helps rendering a text file into a morse code wav file.
 
-###Clone
+### Clone
 
 ```
-git clone git@github.com:benishor/morse-writer.git
-cd morse-writer
-git submodule init
-git submodule update
+git clone --recursive git@github.com:benishor/morse-writer.git
 ```
 
-###Build
+### Build
 
 ```
 mkdir build && cd build
@@ -21,7 +18,7 @@ cmake .. && make
 
 To run unit tests `make test`
 
-###Usage
+### Usage
 
 ```
 ./morse-writer -i fileToConvert -o outputWavFile
